@@ -2,6 +2,7 @@ package view;
 
 import dto.ProdutosDTO;
 import dao.ProdutosDAO;
+import javax.swing.JOptionPane;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -145,7 +146,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_cadastroNomeActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-         try {
+          try {
             String nome = cadastroNome.getText();
             int valor = Integer.parseInt(cadastroValor.getText());
             String status = "A Venda";
@@ -158,13 +159,17 @@ public class cadastroVIEW extends javax.swing.JFrame {
             ProdutosDAO produtodao = new ProdutosDAO();
             produtodao.cadastrarProduto(produto);
 
+            // Mensagem de sucesso
+            JOptionPane.showMessageDialog(this, "Produto cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+            // Limpa campos
             cadastroNome.setText("");
             cadastroValor.setText("");
 
         } catch (NumberFormatException ex) {
-            System.out.println("Valor inválido!");
+            JOptionPane.showMessageDialog(this, "Valor inválido! Digite um número.", "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
-            System.out.println("Erro ao cadastrar produto: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Erro ao cadastrar produto: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
