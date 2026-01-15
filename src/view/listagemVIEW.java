@@ -5,6 +5,7 @@ import dto.ProdutosDTO;
 import dao.ProdutosDAO;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -156,6 +157,24 @@ public class listagemVIEW extends javax.swing.JFrame {
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
+
+    // =================== Atualização da tabela ===================
+
+    public void atualizarLista() {
+        try {
+            ProdutosDAO produtosdao = new ProdutosDAO();
+            ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutos();
+
+            DefaultTableModel model = (DefaultTableModel) listaProdutos.getModel();
+            model.setRowCount(0);
+
+            for (ProdutosDTO p : listagem) {
+                model.addRow(new Object[]{p.getId(), p.getNome(), p.getValor(), p.getStatus()});
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar produtos: " + e.getMessage());
+        }
+    }
 
     /**
      * @param args the command line arguments
