@@ -49,7 +49,7 @@ public class ProdutosDAO {
 
             while (rs.next()) {
                 ProdutosDTO produto = new ProdutosDTO();
-                produto.setId(rs.getLong("id"));  // aqui usamos long
+                produto.setId(rs.getInt("id"));
                 produto.setNome(rs.getString("nome"));
                 produto.setValor(rs.getInt("valor"));
                 produto.setStatus(rs.getString("status"));
@@ -61,5 +61,27 @@ public class ProdutosDAO {
         }
 
         return lista;
+    }
+     /**
+     * Vender produto - atualiza o status para "Vendido"
+     * @param id ID do produto a ser vendido
+     * @return true se a venda foi bem-sucedida, false caso contrário
+     */
+    public boolean venderProduto(int id) {
+        String sql = "UPDATE produtos SET status = ? WHERE id = ?";
+
+        try (Connection conn = new conectaDAO().connectDB();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, "Vendido");
+            stmt.setInt(2, id);
+
+            int linhasAfetadas = stmt.executeUpdate();
+            return linhasAfetadas > 0;
+
+        } catch (SQLException ex) {
+            System.out.println("Erro ao vender produto: " + ex.getMessage());
+            return false;
+        }
     }
 }
