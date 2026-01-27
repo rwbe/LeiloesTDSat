@@ -4,6 +4,12 @@
  */
 package view;
 
+import dto.ProdutosDTO;
+import dao.ProdutosDAO;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Rwbe
@@ -17,6 +23,7 @@ public class vendasVIEW extends javax.swing.JFrame {
      */
     public vendasVIEW() {
         initComponents();
+        listarProdutosVendidos();
     }
 
     /**
@@ -114,13 +121,52 @@ public class vendasVIEW extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
-        // TODO add your handling code here:
+        listarProdutosVendidos();
+        JOptionPane.showMessageDialog(this, 
+            "Lista atualizada com sucesso!", 
+            "Sucesso", 
+            JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnAtualizarActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
+    /**
+     * Método para listar apenas produtos vendidos
+     */
+    private void listarProdutosVendidos() {
+        try {
+            ProdutosDAO produtosdao = new ProdutosDAO();
+            ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutosVendidos();
+
+            DefaultTableModel model = (DefaultTableModel) tabelaVendas.getModel();
+            model.setRowCount(0);
+
+            if (listagem.isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "Nenhum produto vendido encontrado!", 
+                    "Informação", 
+                    JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
+            for (ProdutosDTO produto : listagem) {
+                model.addRow(new Object[]{
+                    produto.getId(),
+                    produto.getNome(),
+                    "R$ " + produto.getValor(),
+                    produto.getStatus()
+                });
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, 
+                "Erro ao carregar produtos vendidos: " + e.getMessage(), 
+                "Erro", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
