@@ -141,17 +141,59 @@ public class listagemVIEW extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
-        String id = id_produto_venda.getText();
+                try {
+            String idTexto = id_produto_venda.getText();
 
-        ProdutosDAO produtosdao = new ProdutosDAO();
+            // Validação: campo vazio
+            if (idTexto.isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "Por favor, digite o ID do produto!", 
+                    "Aviso", 
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
-        //produtosdao.venderProduto(Integer.parseInt(id));
-        listarProdutos();
+            // converte para int
+            int id = Integer.parseInt(idTexto);
+
+            // Chama método venderProduto
+            ProdutosDAO produtosdao = new ProdutosDAO();
+            boolean sucesso = produtosdao.venderProduto(id);
+
+            if (sucesso) {
+                JOptionPane.showMessageDialog(this, 
+                    "Produto vendido com sucesso!", 
+                    "Sucesso", 
+                    JOptionPane.INFORMATION_MESSAGE);
+                
+                // limpa o campo de ID
+                id_produto_venda.setText("");
+                
+                // atualiza a lista
+                atualizarLista();
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Produto não encontrado ou já vendido!", 
+                    "Erro", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, 
+                "ID inválido! Por favor, digite apenas números.", 
+                "Erro", 
+                JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, 
+                "Erro ao vender produto: " + ex.getMessage(), 
+                "Erro", 
+                JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
-        //vendasVIEW vendas = new vendasVIEW();
-        //vendas.setVisible(true);
+        vendasVIEW vendas = new vendasVIEW();
+        vendas.setVisible(true);
     }//GEN-LAST:event_btnVendasActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
